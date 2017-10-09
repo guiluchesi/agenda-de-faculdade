@@ -11,6 +11,7 @@ var buffer = require('vinyl-buffer');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var plumber = require('gulp-plumber');
+var babel = require('gulp-babel');
 
 gulp.task('sass', function() {
   return gulp.src('public/css/main.scss')
@@ -22,14 +23,23 @@ gulp.task('sass', function() {
 });
 
 gulp.task('angular', function() {
-  return gulp.src([
+  const jsFiles = [
     'app/app.js',
     'app/controllers/*.js',
+    'app/partials/**/*.js',
     'app/services/*.js'
-  ])
+  ];
+
+  return gulp.src(jsFiles)
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(babel({
+      presets: ['env']
+    }))
     .pipe(concat('application.js'))
     .pipe(ngAnnotate())
     .pipe(gulpif(argv.production, uglify()))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('public/js'));
 });
 

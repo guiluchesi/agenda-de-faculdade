@@ -36,8 +36,17 @@
     "vinyl-buffer": "^1.0.0",
     "yargs": "^4.3.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "gulp-babel": "^7.0.0"
+  },
   "engines": {
     "node": "6.1.0"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
   }
 }

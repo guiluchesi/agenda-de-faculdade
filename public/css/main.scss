@@ -1,5 +1,17 @@
+$azul: #38a1e5;
+$azulClaro: #4cc1f4;
+$azulEscuro: #095bab;
+$borderRadius: 4px;
+
+
 @import 'normalize';
 @import 'flexboxgrid';
+@import './modules/header';
+@import './modules/projetos';
+
+* {
+  box-sizing: border-box;
+}
 
 html {
   position: relative;
@@ -8,6 +20,8 @@ html {
 
 body {
   margin-bottom: 44px;
+  padding-top: 180px;
+  background-color: #fdfdfd;
 }
 
 ul, ol {
@@ -70,4 +84,38 @@ form button[type="submit"] {
   width: 30px;
   height: 30px;
   vertical-align: middle;
+}
+
+.titulos {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  h1 { margin: 0; }
+}
+
+.btn {
+  padding: 10px 25px;
+  background-color: red;
+  border: none;
+  border-radius: $borderRadius;
+  background-color: $azul;
+  color: #fff;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  will-change: background-color, transform, box-shadow;
+  cursor: pointer;
+
+  &.dark { background-color: $azulEscuro; }
+  &:focus { outline: 0; }
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.15);
+  }
+
+  &:disabled,
+  &[disabled] {
+    background-color: #d6d6d6;
+    cursor: not-allowed;
+    &:hover { box-shadow: none; transform: none; }
+  }
 }

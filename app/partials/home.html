@@ -1,25 +1,12 @@
 <div class="container">
+  <div class="row titulos" ng-controller="ProjetoForm as form">
+    <h1>Próximos entregas / provas</h1>
+    <button type="button" class="btn dark" ng-disabled="form.criarNovo" ng-click="form.abrirForm()">Adicionar nova</button>
+    <projeto-form></projeto-form>
+  </div>
   <div class="row">
-    <div class="col-sm">
-      <h3>Heading</h3>
-      <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-        condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod.
-        Donec sed odio dui.</p>
-      <a href="#" role="button">View details</a>
-    </div>
-    <div class="col-sm">
-      <h3>Heading</h3>
-      <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-        condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod.
-        Donec sed odio dui.</p>
-      <a href="#" role="button">View details</a>
-    </div>
-    <div class="col-sm">
-      <h3>Heading</h3>
-      <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-        condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod.
-        Donec sed odio dui.</p>
-      <a href="#" role="button">View details</a>
+    <div class="projetos" ng-controller="ProjetosCtrl as projetos">
+      <projeto-unico ng-repeat="projeto in projetos.lista"></projeto-unico>
     </div>
   </div>
 </div>

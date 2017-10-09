@@ -1,0 +1,19 @@
+header.header {
+  padding: 20px 0;
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.12);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #fff;
+  z-index: 2;
+
+  .logo {
+    background-image: url('../images/logo-plataforma.png');
+    background-size: 100%;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto;
+    font-size: 0;
+    background-repeat: no-repeat;
+  }
+}
