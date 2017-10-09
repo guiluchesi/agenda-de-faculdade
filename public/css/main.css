@@ -1121,6 +1121,9 @@ header.header {
               align-items: center;
       height: 160px;
       overflow: hidden; }
+      .projetos .projeto-unico .content p {
+        width: 100%;
+        word-wrap: break-word; }
     .projetos .projeto-unico .meta::after {
       content: '';
       width: calc(100% + 50px);

@@ -18,41 +18,26 @@ angular.module('MyApp', ['ngRoute']).config(["$routeProvider", "$locationProvide
 }]);
 'use strict';
 
-angular.module('MyApp').controller('ContactCtrl', ["$scope", "Contact", function ($scope, Contact) {
-  $scope.sendContactForm = function () {
-    Contact.send($scope.contact).then(function (response) {
-      $scope.messages = {
-        success: [response.data]
-      };
-    }).catch(function (response) {
-      $scope.messages = {
-        error: Array.isArray(response.data) ? response.data : [response.data]
-      };
-    });
-  };
-}]);
-'use strict';
-
-angular.module('MyApp').controller('HeaderCtrl', ["$scope", "$location", "$window", function ($scope, $location, $window) {
-  $scope.isActive = function (viewLocation) {
-    return viewLocation === $location.path();
-  };
-}]);
-'use strict';
-
 (function () {
   'use strict';
 
-  var ProjetoForm = function ProjetoForm() {
+  var ProjetoForm = function ProjetoForm(projetosFactory, $filter, $route) {
     var ctrl = this;
     ctrl.criarNovo = false;
     ctrl.data = {};
 
     ctrl.enviar = function () {
       var dadosDoForm = Object.assign({}, ctrl.data);
-      ctrl.data = {};
-      ctrl.criarNovo = false;
-      console.log(dadosDoForm);
+      dadosDoForm.data = $filter('date')(dadosDoForm.data, 'yyyy/M/d h:mm:ss');
+
+      projetosFactory.cadastrar(dadosDoForm).then(function () {
+        ctrl.data = {};
+        ctrl.criarNovo = false;
+        $route.reload();
+        console.log('Enviado com sucesso.');
+      }).catch(function (erro) {
+        return console.log(erro);
+      });
     };
 
     ctrl.fecharForm = function () {
@@ -62,6 +47,7 @@ angular.module('MyApp').controller('HeaderCtrl', ["$scope", "$location", "$windo
       return ctrl.criarNovo = true;
     };
   };
+  ProjetoForm.$inject = ["projetosFactory", "$filter", "$route"];
 
   angular.module('MyApp').controller('ProjetoForm', ProjetoForm);
 })();
@@ -86,27 +72,17 @@ angular.module('MyApp').controller('HeaderCtrl', ["$scope", "$location", "$windo
 (function () {
   'use strict';
 
-  var ProjetosCtrl = function ProjetosCtrl() {
-    var projetos = [{
-      'titulo': 'Sistema CR',
-      'materia': 'Programação Web (Tanji)',
-      'data': '18/12/1994',
-      'comentario': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non eligendi qui eius ab? Eveniet officiis, fuga saepe deserunt aliquid enim itaque ipsa. Ipsa, ipsum molestiae, officiis aliquid ut asperiores suscipit dolor doloribus enim, aliquam accusantium inventore assumenda odit mollitia laborum. Vel illum natus expedita soluta ipsam iste non ad quisquam enim, temporibus id quidem doloremque dolore asperiores neque vitae dolorem ipsa laborum, suscipit accusamus molestiae! Nihil expedita, porro modi officia dolorum debitis eius. Ullam soluta ab, maiores nostrum sit illo perferendis aspernatur cum quisquam nulla laborum nesciunt tempore voluptatibus minima accusantium aliquid libero numquam expedita provident veniam temporibus repudiandae obcaecati.'
-    }, {
-      'titulo': 'Sistema CR',
-      'materia': 'Programação Web (Tanji)',
-      'data': '18/12/1994',
-      'comentario': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non eligendi qui eius ab? Eveniet officiis, fuga saepe deserunt aliquid enim itaque ipsa. Ipsa, ipsum molestiae, officiis aliquid ut asperiores suscipit dolor doloribus enim, aliquam accusantium inventore assumenda odit mollitia laborum. Vel illum natus expedita soluta ipsam iste non ad quisquam enim, temporibus id quidem doloremque dolore asperiores neque vitae dolorem ipsa laborum, suscipit accusamus molestiae! Nihil expedita, porro modi officia dolorum debitis eius. Ullam soluta ab, maiores nostrum sit illo perferendis aspernatur cum quisquam nulla laborum nesciunt tempore voluptatibus minima accusantium aliquid libero numquam expedita provident veniam temporibus repudiandae obcaecati.'
-    }, {
-      'titulo': 'Sistema CR',
-      'materia': 'Programação Web (Tanji)',
-      'data': '18/12/1994',
-      'comentario': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non eligendi qui eius ab? Eveniet officiis, fuga saepe deserunt aliquid enim itaque ipsa. Ipsa, ipsum molestiae, officiis aliquid ut asperiores suscipit dolor doloribus enim, aliquam accusantium inventore assumenda odit mollitia laborum. Vel illum natus expedita soluta ipsam iste non ad quisquam enim, temporibus id quidem doloremque dolore asperiores neque vitae dolorem ipsa laborum, suscipit accusamus molestiae! Nihil expedita, porro modi officia dolorum debitis eius. Ullam soluta ab, maiores nostrum sit illo perferendis aspernatur cum quisquam nulla laborum nesciunt tempore voluptatibus minima accusantium aliquid libero numquam expedita provident veniam temporibus repudiandae obcaecati.'
-    }];
-
+  var ProjetosCtrl = function ProjetosCtrl(projetosFactory) {
     var ctrl = this;
-    ctrl.lista = projetos;
+    ctrl.lista = false;
+
+    projetosFactory.listar().then(function (projetos) {
+      return ctrl.lista = projetos.data;
+    }).catch(function (erro) {
+      return console.log(erro);
+    });
   };
+  ProjetosCtrl.$inject = ["projetosFactory"];
 
   angular.module('MyApp').controller('ProjetosCtrl', ProjetosCtrl);
 })();
@@ -130,11 +106,24 @@ angular.module('MyApp').directive('projetoUnico', function () {
 });
 'use strict';
 
-angular.module('MyApp').factory('Contact', ["$http", function ($http) {
-  return {
-    send: function send(data) {
-      return $http.post('/contact', data);
-    }
+(function () {
+  'use strict';
+
+  var projetosFactory = function projetosFactory($http) {
+    var listar = function listar() {
+      return $http.get('/projetos');
+    };
+    var cadastrar = function cadastrar(projeto) {
+      return $http.post('/projetos/criar', projeto);
+    };
+
+    return {
+      listar: listar,
+      cadastrar: cadastrar
+    };
   };
-}]);
+  projetosFactory.$inject = ["$http"];
+
+  angular.module('MyApp').factory('projetosFactory', projetosFactory);
+})();
 //# sourceMappingURL=application.js.map

@@ -1,12 +1,13 @@
 <div class="container">
   <div class="row titulos" ng-controller="ProjetoForm as form">
-    <h1>Próximos entregas / provas</h1>
+    <h1>Próximas entregas / provas</h1>
     <button type="button" class="btn dark" ng-disabled="form.criarNovo" ng-click="form.abrirForm()">Adicionar nova</button>
     <projeto-form></projeto-form>
   </div>
   <div class="row">
     <div class="projetos" ng-controller="ProjetosCtrl as projetos">
-      <projeto-unico ng-repeat="projeto in projetos.lista"></projeto-unico>
+      <h3 ng-if="!projetos.lista">Sem projetos cadastrados ainda.</h3>
+      <projeto-unico ng-if="projetos.lista" ng-repeat="projeto in projetos.lista track by $index"></projeto-unico>
     </div>
   </div>
 </div>

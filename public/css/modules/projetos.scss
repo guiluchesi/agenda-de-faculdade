@@ -41,6 +41,10 @@
           align-items: center;
           height: 160px;
           overflow: hidden;
+          p {
+            width: 100%;
+            word-wrap: break-word;
+          }
         }
 
         .meta::after {

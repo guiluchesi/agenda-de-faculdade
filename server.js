@@ -1,17 +1,15 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var compression = require('compression');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var expressValidator = require('express-validator');
-var dotenv = require('dotenv');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const compression = require('compression');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
+const expressValidatorConfig = require('./config/express-validator');
+const dotenv = require('dotenv');
 
 // Load environment variables from .env file
 dotenv.load();
-
-// Controllers
-var contactController = require('./controllers/contact');
 
 var app = express();
 
@@ -20,15 +18,17 @@ app.use(compression());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(expressValidator());
+app.use(expressValidator(expressValidatorConfig));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.post('/contact', contactController.contactPost);
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'app', 'index.html'));
 });
+
+const projetoController = require('./controllers/projetos');
+app.get('/projetos', projetoController.obterTodos);
+app.post('/projetos/criar', projetoController.inserir);
 
 app.get('*', function(req, res) {
   res.redirect('/#' + req.originalUrl);
