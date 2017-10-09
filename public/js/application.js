@@ -54,18 +54,18 @@ angular.module('MyApp', ['ngRoute']).config(["$routeProvider", "$locationProvide
 'use strict';
 
 (function () {
-    'use strict';
+  'use strict';
 
-    var ProjetoUnico = function ProjetoUnico() {
-        var ctrl = this;
+  var ProjetoUnico = function ProjetoUnico() {
+    var ctrl = this;
 
-        ctrl.saibaMais = false;
-        ctrl.toogleSaibaMais = function () {
-            return ctrl.saibaMais = !ctrl.saibaMais;
-        };
+    ctrl.saibaMais = false;
+    ctrl.toogleSaibaMais = function () {
+      return ctrl.saibaMais = !ctrl.saibaMais;
     };
+  };
 
-    angular.module('MyApp').controller('ProjetoUnico', ProjetoUnico);
+  angular.module('MyApp').controller('ProjetoUnico', ProjetoUnico);
 })();
 'use strict';
 
