@@ -5,9 +5,6 @@
     <projeto-form></projeto-form>
   </div>
   <div class="row">
-    <div class="projetos" ng-controller="ProjetosCtrl as projetos">
-      <h3 ng-if="!projetos.lista">Sem projetos cadastrados ainda.</h3>
-      <projeto-unico ng-if="projetos.lista" ng-repeat="projeto in projetos.lista track by $index"></projeto-unico>
-    </div>
+    <lista-projetos></lista-projetos>
   </div>
 </div>
