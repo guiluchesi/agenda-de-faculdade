@@ -1,0 +1,17 @@
+<div class="form-container titulos">
+  <h1>Próximas entregas / provas</h1>
+  <button type="button" class="btn dark" ng-disabled="criarNovo" ng-click="abrirForm()">Adicionar nova</button>
+
+  <form class="projeto-form" ng-class="{aberto: criarNovo}" ng-submit="enviar()">
+    <input type="text" ng-model="data.titulo" placeholder="Títutlo do projeto">
+    <div class="double">
+      <input type="text" ng-model="data.materia" placeholder="Nome da matéria (Prof)">
+      <input type="date" ng-model="data.data">
+    </div>
+    <textarea ng-model="data.comentarios" rows="8" cols="80" placeholder="Comentários sobre o projeto" maxlength="750"></textarea>
+    <div class="double">
+      <button type="button" class="btn" ng-click="fecharForm()">Cancelar</button>
+      <button type="submit" class="btn dark">Adicionar</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,7 @@
+<div class="projetos">
+  <h3 ng-if="!projetos">Sem projetos cadastrados ainda.</h3>
+  <projeto-unico
+    ng-if="projetos"
+    ng-repeat="projeto in projetos | orderBy : data track by $index"
+  ></projeto-unico>
+</div>
