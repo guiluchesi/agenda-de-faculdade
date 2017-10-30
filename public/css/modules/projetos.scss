@@ -132,6 +132,12 @@
   }
 }
 
+@media (max-width: 420px) {
+  .projetos .projeto-unico {
+    h2 { font-size: 18px; }
+  }
+}
+
 @media (max-width: 340px) {
   .btn { padding: 10px; }
 }

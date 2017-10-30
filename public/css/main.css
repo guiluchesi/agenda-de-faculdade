@@ -1202,6 +1202,10 @@ header.header {
       width: 100%;
       height: 42px; } }
 
+@media (max-width: 420px) {
+  .projetos .projeto-unico h2 {
+    font-size: 18px; } }
+
 @media (max-width: 340px) {
   .btn {
     padding: 10px; } }
@@ -1309,3 +1313,10 @@ form button[type="submit"] {
       box-shadow: none;
       -webkit-transform: none;
               transform: none; }
+
+@media (max-width: 420px) {
+  .titulos {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column; } }

@@ -120,3 +120,7 @@ form button[type="submit"] {
     &:hover { box-shadow: none; transform: none; }
   }
 }
+
+@media (max-width: 420px) {
+  .titulos { flex-direction: column; }
+}
