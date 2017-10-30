@@ -3,6 +3,10 @@ angular.module('MyApp')
     return {
       replace: true,
       restrict: 'E',
-      templateUrl: 'partials/projetos/projeto-unico.html'
+      templateUrl: 'partials/projetos/templates/projeto-unico.html',
+      controller: ($scope) => {
+        $scope.saibaMais = false;
+        $scope.toogleSaibaMais = () => $scope.saibaMais = !$scope.saibaMais;
+      }
     }
   });
