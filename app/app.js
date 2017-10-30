@@ -6,14 +6,9 @@ angular.module('MyApp', ['ngRoute'])
       .when('/', {
         templateUrl: 'partials/home.html'
       })
-      .when('/contact', {
-        templateUrl: 'partials/contact.html',
-        controller: 'ContactCtrl'
-      })
       .otherwise({
         templateUrl: 'partials/404.html'
       });
-
   })
   .run(function($rootScope, $window) {
     if ($window.localStorage.user) {

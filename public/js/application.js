@@ -5,9 +5,6 @@ angular.module('MyApp', ['ngRoute']).config(["$routeProvider", "$locationProvide
 
   $routeProvider.when('/', {
     templateUrl: 'partials/home.html'
-  }).when('/contact', {
-    templateUrl: 'partials/contact.html',
-    controller: 'ContactCtrl'
   }).otherwise({
     templateUrl: 'partials/404.html'
   });
@@ -18,81 +15,37 @@ angular.module('MyApp', ['ngRoute']).config(["$routeProvider", "$locationProvide
 }]);
 'use strict';
 
-(function () {
-  'use strict';
-
-  var ProjetoForm = function ProjetoForm(projetosFactory, $filter, $route) {
-    var ctrl = this;
-    ctrl.criarNovo = false;
-    ctrl.data = {};
-
-    ctrl.enviar = function () {
-      var dadosDoForm = Object.assign({}, ctrl.data);
-      dadosDoForm.data = $filter('date')(dadosDoForm.data, 'yyyy/M/d h:mm:ss');
-
-      projetosFactory.cadastrar(dadosDoForm).then(function () {
-        ctrl.data = {};
-        ctrl.criarNovo = false;
-        $route.reload();
-        console.log('Enviado com sucesso.');
-      }).catch(function (erro) {
-        return console.log(erro);
-      });
-    };
-
-    ctrl.fecharForm = function () {
-      return ctrl.criarNovo = false;
-    };
-    ctrl.abrirForm = function () {
-      return ctrl.criarNovo = true;
-    };
-  };
-  ProjetoForm.$inject = ["projetosFactory", "$filter", "$route"];
-
-  angular.module('MyApp').controller('ProjetoForm', ProjetoForm);
-})();
-'use strict';
-
-(function () {
-    'use strict';
-
-    var ProjetoUnico = function ProjetoUnico() {
-        var ctrl = this;
-
-        ctrl.saibaMais = false;
-        ctrl.toogleSaibaMais = function () {
-            return ctrl.saibaMais = !ctrl.saibaMais;
-        };
-    };
-
-    angular.module('MyApp').controller('ProjetoUnico', ProjetoUnico);
-})();
-'use strict';
-
-(function () {
-  'use strict';
-
-  var ProjetosCtrl = function ProjetosCtrl(projetosFactory) {
-    var ctrl = this;
-    ctrl.lista = false;
-
-    projetosFactory.listar().then(function (projetos) {
-      return ctrl.lista = projetos.data;
-    }).catch(function (erro) {
-      return console.log(erro);
-    });
-  };
-  ProjetosCtrl.$inject = ["projetosFactory"];
-
-  angular.module('MyApp').controller('ProjetosCtrl', ProjetosCtrl);
-})();
-'use strict';
-
 angular.module('MyApp').directive('projetoForm', function () {
   return {
     replace: true,
     restrict: 'E',
-    templateUrl: 'partials/projetos/projeto-form.html'
+    templateUrl: 'partials/projetos/templates/projeto-form.html',
+    controller: ["$scope", "$route", "$filter", "projetosFactory", function controller($scope, $route, $filter, projetosFactory) {
+      $scope.criarNovo = false;
+      $scope.data = {};
+
+      $scope.fecharForm = function () {
+        return $scope.criarNovo = false;
+      };
+      $scope.abrirForm = function () {
+        return $scope.criarNovo = true;
+      };
+
+      $scope.enviar = function () {
+        var dadosDoForm = Object.assign({}, $scope.data);
+        dadosDoForm.data = $filter('date')(dadosDoForm.data, 'yyyy/M/dd h:mm:ss');
+
+        projetosFactory.cadastrar(dadosDoForm).then(function () {
+          $scope.fecharForm();
+          $scope.data = {};
+          setTimeout(function () {
+            return $route.reload();
+          }, 500);
+        }).catch(function (erro) {
+          return console.log(erro);
+        });
+      };
+    }]
   };
 });
 'use strict';
@@ -101,7 +54,31 @@ angular.module('MyApp').directive('projetoUnico', function () {
   return {
     replace: true,
     restrict: 'E',
-    templateUrl: 'partials/projetos/projeto-unico.html'
+    templateUrl: 'partials/projetos/templates/projeto-unico.html',
+    controller: ["$scope", function controller($scope) {
+      $scope.saibaMais = false;
+      $scope.toogleSaibaMais = function () {
+        return $scope.saibaMais = !$scope.saibaMais;
+      };
+    }]
+  };
+});
+'use strict';
+
+angular.module('MyApp').directive('listaProjetos', function () {
+  return {
+    replace: true,
+    restrict: 'E',
+    templateUrl: 'partials/projetos/templates/lista-projetos.html',
+    controller: ["$rootScope", "projetosFactory", function controller($rootScope, projetosFactory) {
+      $rootScope.projetos = [];
+
+      projetosFactory.listar().then(function (projetos) {
+        return $rootScope.projetos = projetos.data;
+      }).catch(function (erro) {
+        return console.log(erro);
+      });
+    }]
   };
 });
 'use strict';
