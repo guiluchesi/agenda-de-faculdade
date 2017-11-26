@@ -29,5 +29,5 @@ exports.inserir = (req, res, next) => {
   Projeto.forge()
     .save(req.body)
     .then( projeto => res.status(200).send(projeto) );
-    // .catch( error => res.status(500).send(error) );
+
 };
